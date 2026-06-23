@@ -14,7 +14,78 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chunks: {
+        Row: {
+          created_at: string
+          id: string
+          images: string[]
+          memo: string | null
+          platforms: string[]
+          section: Database["public"]["Enums"]["section_kind"]
+          tags: string[]
+          text: string
+          updated_at: string
+          usage_count: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          images?: string[]
+          memo?: string | null
+          platforms?: string[]
+          section: Database["public"]["Enums"]["section_kind"]
+          tags?: string[]
+          text: string
+          updated_at?: string
+          usage_count?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          images?: string[]
+          memo?: string | null
+          platforms?: string[]
+          section?: Database["public"]["Enums"]["section_kind"]
+          tags?: string[]
+          text?: string
+          updated_at?: string
+          usage_count?: number
+        }
+        Relationships: []
+      }
+      prompt_sets: {
+        Row: {
+          compiled_text: string
+          created_at: string
+          id: string
+          platform: string
+          result_images: string[]
+          sections: Json
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          compiled_text?: string
+          created_at?: string
+          id?: string
+          platform?: string
+          result_images?: string[]
+          sections?: Json
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          compiled_text?: string
+          created_at?: string
+          id?: string
+          platform?: string
+          result_images?: string[]
+          sections?: Json
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +94,16 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      section_kind:
+        | "subject"
+        | "action"
+        | "space"
+        | "camera"
+        | "light"
+        | "mood"
+        | "style"
+        | "technical"
+        | "negative"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +230,18 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      section_kind: [
+        "subject",
+        "action",
+        "space",
+        "camera",
+        "light",
+        "mood",
+        "style",
+        "technical",
+        "negative",
+      ],
+    },
   },
 } as const
