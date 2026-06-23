@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Search, Copy, Trash2, Hammer, X, Upload, Pencil, Check } from "lucide-react";
+import { Search, Copy, Trash2, Hammer, X, Upload, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import {
   usePromptSets,
@@ -8,7 +8,7 @@ import {
   useUpdatePromptSetMeta,
   uploadImage,
 } from "@/lib/data";
-import { SECTION_META, SECTIONS, PLATFORMS, type Section } from "@/lib/sections";
+import { SECTIONS, PLATFORMS } from "@/lib/sections";
 import { SectionBadge } from "@/components/SectionBadge";
 import { cn } from "@/lib/utils";
 import type { PromptSet } from "@/lib/types";
