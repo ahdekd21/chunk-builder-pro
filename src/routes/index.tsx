@@ -212,13 +212,83 @@ function DetailPanel({
   onDelete: () => void;
   onBuildFrom: () => void;
 }) {
+  const update = useUpdatePromptSetMeta();
+  const [editingTitle, setEditingTitle] = useState(false);
+  const [titleDraft, setTitleDraft] = useState(set.title);
+  const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    setTitleDraft(set.title);
+    setEditingTitle(false);
+  }, [set.id, set.title]);
+
+  const saveTitle = async () => {
+    const t = titleDraft.trim();
+    if (!t || t === set.title) {
+      setEditingTitle(false);
+      setTitleDraft(set.title);
+      return;
+    }
+    await update.mutateAsync({ id: set.id, title: t });
+    setEditingTitle(false);
+    toast.success("제목 변경됨");
+  };
+
+  const onFile = async (files: FileList | null) => {
+    if (!files?.length) return;
+    setUploading(true);
+    try {
+      const urls = await Promise.all(Array.from(files).map(uploadImage));
+      await update.mutateAsync({
+        id: set.id,
+        result_images: [...(set.result_images ?? []), ...urls],
+      });
+      toast.success("이미지 추가됨");
+    } catch (e) {
+      toast.error("업로드 실패");
+      console.error(e);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeImage = async (url: string) => {
+    await update.mutateAsync({
+      id: set.id,
+      result_images: (set.result_images ?? []).filter((u) => u !== url),
+    });
+  };
+
   return (
     <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between px-5 py-4 border-b border-border">
-        <h2 className="text-sm font-semibold truncate">{set.title}</h2>
+      <div className="flex items-center justify-between px-5 py-4 border-b border-border gap-2">
+        {editingTitle ? (
+          <input
+            autoFocus
+            value={titleDraft}
+            onChange={(e) => setTitleDraft(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") saveTitle();
+              if (e.key === "Escape") {
+                setEditingTitle(false);
+                setTitleDraft(set.title);
+              }
+            }}
+            onBlur={saveTitle}
+            className="flex-1 min-w-0 rounded-md border border-border bg-background px-2 py-1 text-sm outline-none focus:border-border-strong"
+          />
+        ) : (
+          <button
+            onClick={() => setEditingTitle(true)}
+            className="group flex items-center gap-1.5 min-w-0 text-left"
+          >
+            <h2 className="text-sm font-semibold truncate">{set.title}</h2>
+            <Pencil className="h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100" />
+          </button>
+        )}
         <button
           onClick={onClose}
-          className="rounded-md p-1.5 hover:bg-accent text-muted-foreground"
+          className="rounded-md p-1.5 hover:bg-accent text-muted-foreground shrink-0"
           aria-label="Close"
         >
           <X className="h-4 w-4" />
@@ -226,23 +296,47 @@ function DetailPanel({
       </div>
 
       <div className="flex-1 overflow-y-auto px-5 py-5 space-y-6">
-        {set.result_images?.length > 0 && (
-          <div>
-            <p className="text-[11px] uppercase tracking-wider text-muted-foreground mb-2">
-              결과
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-[11px] uppercase tracking-wider text-muted-foreground">
+              결과 이미지
             </p>
+            <label className="text-[11px] text-muted-foreground inline-flex items-center gap-1 cursor-pointer hover:text-foreground">
+              <Upload className="h-3 w-3" />
+              {uploading ? "업로드 중…" : "추가"}
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={(e) => onFile(e.target.files)}
+              />
+            </label>
+          </div>
+          {set.result_images?.length > 0 ? (
             <div className="grid grid-cols-2 gap-2">
-              {set.result_images.map((url, i) => (
-                <img
-                  key={i}
-                  src={url}
-                  alt=""
-                  className="aspect-square w-full object-cover rounded-lg border border-border"
-                />
+              {set.result_images.map((url) => (
+                <div key={url} className="relative group">
+                  <img
+                    src={url}
+                    alt=""
+                    className="aspect-square w-full object-cover rounded-lg border border-border"
+                  />
+                  <button
+                    onClick={() => removeImage(url)}
+                    className="absolute top-1.5 right-1.5 rounded-full bg-background/90 p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </div>
               ))}
             </div>
-          </div>
-        )}
+          ) : (
+            <div className="rounded-lg border border-dashed border-border py-6 text-center text-[12px] text-muted-foreground">
+              생성한 이미지를 올려서 함께 보관하세요
+            </div>
+          )}
+        </div>
 
         <div>
           <p className="text-[11px] uppercase tracking-wider text-muted-foreground mb-2">
@@ -308,4 +402,5 @@ function DetailPanel({
       </div>
     </div>
   );
+}
 }
