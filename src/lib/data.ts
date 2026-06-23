@@ -140,7 +140,7 @@ export function useUpdatePromptSetMeta() {
       title?: string;
       result_images?: string[];
     }) => {
-      const patch: Record<string, unknown> = {};
+      const patch: { title?: string; result_images?: string[] } = {};
       if (input.title !== undefined) patch.title = input.title;
       if (input.result_images !== undefined) patch.result_images = input.result_images;
       const { error } = await supabase
