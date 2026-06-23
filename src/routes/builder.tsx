@@ -48,7 +48,9 @@ function BuilderPage() {
   const [manualEdit, setManualEdit] = useState(false);
   const [manualText, setManualText] = useState("");
   const [title, setTitle] = useState("");
+  const [loadedId, setLoadedId] = useState<string | null>(null);
   const [saveOpen, setSaveOpen] = useState(false);
+  const [saveAsNew, setSaveAsNew] = useState(false);
 
   // Preload from existing set
   useEffect(() => {
