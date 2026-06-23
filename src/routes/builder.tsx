@@ -271,6 +271,9 @@ function BuilderPage() {
         <SaveDialog
           title={title}
           setTitle={setTitle}
+          isUpdate={!!loadedId}
+          saveAsNew={saveAsNew}
+          setSaveAsNew={setSaveAsNew}
           onCancel={() => setSaveOpen(false)}
           onSave={onSave}
           pending={save.isPending}
