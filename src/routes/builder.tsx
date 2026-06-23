@@ -118,14 +118,16 @@ function BuilderPage() {
       toast.error("제목을 입력해주세요");
       return;
     }
+    const useId = loadedId && !saveAsNew ? loadedId : undefined;
     await save.mutateAsync({
+      id: useId,
       title: title.trim(),
       platform,
       sections: sectionsState,
       compiled_text: displayText,
       result_images: [],
     });
-    toast.success("저장됨");
+    toast.success(useId ? "덮어쓰기 완료" : "저장됨");
     setSaveOpen(false);
     navigate({ to: "/" });
   };
