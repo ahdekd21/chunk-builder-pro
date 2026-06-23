@@ -96,9 +96,9 @@ export function useSavePromptSet() {
       sections: PromptSet["sections"];
       compiled_text: string;
       result_images: string[];
-    }) => {
+    }): Promise<{ id: string }> => {
       if (input.id) {
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from("prompt_sets")
           .update({
             title: input.title,
@@ -107,18 +107,47 @@ export function useSavePromptSet() {
             compiled_text: input.compiled_text,
             result_images: input.result_images,
           })
-          .eq("id", input.id);
+          .eq("id", input.id)
+          .select("id")
+          .single();
         if (error) throw error;
+        return { id: data.id as string };
       } else {
-        const { error } = await supabase.from("prompt_sets").insert({
-          title: input.title,
-          platform: input.platform,
-          sections: input.sections as never,
-          compiled_text: input.compiled_text,
-          result_images: input.result_images,
-        });
+        const { data, error } = await supabase
+          .from("prompt_sets")
+          .insert({
+            title: input.title,
+            platform: input.platform,
+            sections: input.sections as never,
+            compiled_text: input.compiled_text,
+            result_images: input.result_images,
+          })
+          .select("id")
+          .single();
         if (error) throw error;
+        return { id: data.id as string };
       }
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: SETS_KEY }),
+  });
+}
+
+export function useUpdatePromptSetMeta() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: {
+      id: string;
+      title?: string;
+      result_images?: string[];
+    }) => {
+      const patch: { title?: string; result_images?: string[] } = {};
+      if (input.title !== undefined) patch.title = input.title;
+      if (input.result_images !== undefined) patch.result_images = input.result_images;
+      const { error } = await supabase
+        .from("prompt_sets")
+        .update(patch)
+        .eq("id", input.id);
+      if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: SETS_KEY }),
   });

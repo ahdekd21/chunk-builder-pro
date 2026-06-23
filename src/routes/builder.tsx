@@ -48,7 +48,9 @@ function BuilderPage() {
   const [manualEdit, setManualEdit] = useState(false);
   const [manualText, setManualText] = useState("");
   const [title, setTitle] = useState("");
+  const [loadedId, setLoadedId] = useState<string | null>(null);
   const [saveOpen, setSaveOpen] = useState(false);
+  const [saveAsNew, setSaveAsNew] = useState(false);
 
   // Preload from existing set
   useEffect(() => {
@@ -58,6 +60,7 @@ function BuilderPage() {
       setSectionsState(found.sections ?? {});
       setPlatform(found.platform as Platform);
       setTitle(found.title);
+      setLoadedId(found.id);
     }
   }, [from, sets]);
 
@@ -115,14 +118,17 @@ function BuilderPage() {
       toast.error("제목을 입력해주세요");
       return;
     }
+    const useId = loadedId && !saveAsNew ? loadedId : undefined;
+    const existing = useId ? sets.find((s) => s.id === useId) : undefined;
     await save.mutateAsync({
+      id: useId,
       title: title.trim(),
       platform,
       sections: sectionsState,
       compiled_text: displayText,
-      result_images: [],
+      result_images: existing?.result_images ?? [],
     });
-    toast.success("저장됨");
+    toast.success(useId ? "덮어쓰기 완료" : "저장됨");
     setSaveOpen(false);
     navigate({ to: "/" });
   };
@@ -133,6 +139,8 @@ function BuilderPage() {
     setManualEdit(false);
     setManualText("");
     setTitle("");
+    setLoadedId(null);
+    setSaveAsNew(false);
   };
 
   return (
@@ -143,7 +151,14 @@ function BuilderPage() {
             <div>
               <h1 className="text-2xl font-semibold tracking-tight">Builder</h1>
               <p className="mt-1 text-sm text-muted-foreground">
-                Section을 눌러 청크를 골라 조립하세요
+                {loadedId ? (
+                  <>
+                    <span className="text-foreground/80">{title || "(제목 없음)"}</span>
+                    <span className="mx-1.5">·</span>편집 중
+                  </>
+                ) : (
+                  "Section을 눌러 청크를 골라 조립하세요"
+                )}
               </p>
             </div>
             <div className="flex gap-2">
@@ -263,6 +278,9 @@ function BuilderPage() {
         <SaveDialog
           title={title}
           setTitle={setTitle}
+          isUpdate={!!loadedId}
+          saveAsNew={saveAsNew}
+          setSaveAsNew={setSaveAsNew}
           onCancel={() => setSaveOpen(false)}
           onSave={onSave}
           pending={save.isPending}
@@ -514,16 +532,23 @@ function ChunkPicker({
 function SaveDialog({
   title,
   setTitle,
+  isUpdate,
+  saveAsNew,
+  setSaveAsNew,
   onCancel,
   onSave,
   pending,
 }: {
   title: string;
   setTitle: (s: string) => void;
+  isUpdate: boolean;
+  saveAsNew: boolean;
+  setSaveAsNew: (b: boolean) => void;
   onCancel: () => void;
   onSave: () => void;
   pending: boolean;
 }) {
+  const label = isUpdate && !saveAsNew ? "덮어쓰기" : "저장";
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-foreground/20 p-4">
       <div className="w-full max-w-md rounded-2xl bg-card border border-border p-6">
@@ -544,6 +569,17 @@ function SaveDialog({
           placeholder="예: 황금시간 인물 클로즈업"
           className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none focus:border-border-strong"
         />
+        {isUpdate && (
+          <label className="mt-4 flex items-center gap-2 text-[12.5px] text-foreground/80 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={saveAsNew}
+              onChange={(e) => setSaveAsNew(e.target.checked)}
+              className="accent-foreground"
+            />
+            새 세트로 저장 (원본 유지)
+          </label>
+        )}
         <div className="mt-5 flex gap-2">
           <button
             onClick={onCancel}
@@ -556,7 +592,7 @@ function SaveDialog({
             disabled={pending}
             className="flex-1 rounded-xl bg-foreground text-background px-3 py-2 text-sm font-medium disabled:opacity-60"
           >
-            {pending ? "저장 중…" : "저장"}
+            {pending ? "저장 중…" : label}
           </button>
         </div>
       </div>
