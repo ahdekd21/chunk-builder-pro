@@ -60,6 +60,7 @@ function BuilderPage() {
       setSectionsState(found.sections ?? {});
       setPlatform(found.platform as Platform);
       setTitle(found.title);
+      setLoadedId(found.id);
     }
   }, [from, sets]);
 
