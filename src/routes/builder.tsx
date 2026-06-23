@@ -525,16 +525,23 @@ function ChunkPicker({
 function SaveDialog({
   title,
   setTitle,
+  isUpdate,
+  saveAsNew,
+  setSaveAsNew,
   onCancel,
   onSave,
   pending,
 }: {
   title: string;
   setTitle: (s: string) => void;
+  isUpdate: boolean;
+  saveAsNew: boolean;
+  setSaveAsNew: (b: boolean) => void;
   onCancel: () => void;
   onSave: () => void;
   pending: boolean;
 }) {
+  const label = isUpdate && !saveAsNew ? "덮어쓰기" : "저장";
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-foreground/20 p-4">
       <div className="w-full max-w-md rounded-2xl bg-card border border-border p-6">
@@ -555,6 +562,17 @@ function SaveDialog({
           placeholder="예: 황금시간 인물 클로즈업"
           className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none focus:border-border-strong"
         />
+        {isUpdate && (
+          <label className="mt-4 flex items-center gap-2 text-[12.5px] text-foreground/80 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={saveAsNew}
+              onChange={(e) => setSaveAsNew(e.target.checked)}
+              className="accent-foreground"
+            />
+            새 세트로 저장 (원본 유지)
+          </label>
+        )}
         <div className="mt-5 flex gap-2">
           <button
             onClick={onCancel}
@@ -567,7 +585,7 @@ function SaveDialog({
             disabled={pending}
             className="flex-1 rounded-xl bg-foreground text-background px-3 py-2 text-sm font-medium disabled:opacity-60"
           >
-            {pending ? "저장 중…" : "저장"}
+            {pending ? "저장 중…" : label}
           </button>
         </div>
       </div>
