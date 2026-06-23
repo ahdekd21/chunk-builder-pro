@@ -151,7 +151,14 @@ function BuilderPage() {
             <div>
               <h1 className="text-2xl font-semibold tracking-tight">Builder</h1>
               <p className="mt-1 text-sm text-muted-foreground">
-                Section을 눌러 청크를 골라 조립하세요
+                {loadedId ? (
+                  <>
+                    <span className="text-foreground/80">{title || "(제목 없음)"}</span>
+                    <span className="mx-1.5">·</span>편집 중
+                  </>
+                ) : (
+                  "Section을 눌러 청크를 골라 조립하세요"
+                )}
               </p>
             </div>
             <div className="flex gap-2">
