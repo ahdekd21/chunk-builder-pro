@@ -119,13 +119,14 @@ function BuilderPage() {
       return;
     }
     const useId = loadedId && !saveAsNew ? loadedId : undefined;
+    const existing = useId ? sets.find((s) => s.id === useId) : undefined;
     await save.mutateAsync({
       id: useId,
       title: title.trim(),
       platform,
       sections: sectionsState,
       compiled_text: displayText,
-      result_images: [],
+      result_images: existing?.result_images ?? [],
     });
     toast.success(useId ? "덮어쓰기 완료" : "저장됨");
     setSaveOpen(false);
@@ -138,6 +139,8 @@ function BuilderPage() {
     setManualEdit(false);
     setManualText("");
     setTitle("");
+    setLoadedId(null);
+    setSaveAsNew(false);
   };
 
   return (
