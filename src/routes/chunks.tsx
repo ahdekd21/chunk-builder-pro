@@ -211,11 +211,11 @@ function ChunkCard({
       {chunk.images.length > 0 && (
         <div className="mt-3 flex gap-1.5 overflow-x-auto">
           {chunk.images.slice(0, 4).map((url, i) => (
-            <img
+            <StorageImage
               key={i}
               src={url}
               alt=""
-              className="h-14 w-14 object-cover rounded-md border border-border shrink-0"
+              className="h-14 w-14 object-cover rounded-md border border-border shrink-0 bg-muted"
             />
           ))}
         </div>
