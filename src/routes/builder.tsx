@@ -16,6 +16,7 @@ import {
   type Platform,
 } from "@/lib/sections";
 import { SectionBadge } from "@/components/SectionBadge";
+import { StorageImage } from "@/components/StorageImage";
 import { compilePrompt } from "@/lib/compile";
 import { cn } from "@/lib/utils";
 import type { Chunk, PromptSetSections } from "@/lib/types";
