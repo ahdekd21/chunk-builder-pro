@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useChunks, useDeleteChunk, useUpsertChunk, uploadImage } from "@/lib/data";
 import { SECTIONS, SECTION_META, PLATFORMS, type Section } from "@/lib/sections";
 import { SectionBadge } from "@/components/SectionBadge";
+import { StorageImage } from "@/components/StorageImage";
 import { cn } from "@/lib/utils";
 import type { Chunk } from "@/lib/types";
 
