@@ -173,7 +173,7 @@ function SetCard({
     >
       {hero ? (
         <div className="aspect-[4/3] bg-muted overflow-hidden">
-          <img src={hero} alt="" className="h-full w-full object-cover" />
+          <StorageImage src={hero} alt="" className="h-full w-full object-cover bg-muted" />
         </div>
       ) : (
         <div className="aspect-[4/3] bg-muted/40 p-4 text-[11px] leading-relaxed text-muted-foreground overflow-hidden">
