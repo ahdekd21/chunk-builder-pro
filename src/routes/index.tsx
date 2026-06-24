@@ -10,6 +10,7 @@ import {
 } from "@/lib/data";
 import { SECTIONS, PLATFORMS } from "@/lib/sections";
 import { SectionBadge } from "@/components/SectionBadge";
+import { StorageImage } from "@/components/StorageImage";
 import { cn } from "@/lib/utils";
 import type { PromptSet } from "@/lib/types";
 
