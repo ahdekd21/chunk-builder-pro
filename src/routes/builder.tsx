@@ -510,11 +510,11 @@ function ChunkPicker({
                   <div className="border-t border-border p-3">
                     <div className="grid grid-cols-3 gap-1.5">
                       {c.images.map((url) => (
-                        <img
+                        <StorageImage
                           key={url}
                           src={url}
                           alt=""
-                          className="aspect-square w-full object-cover rounded-md border border-border"
+                          className="aspect-square w-full object-cover rounded-md border border-border bg-muted"
                         />
                       ))}
                     </div>
