@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useChunks, useDeleteChunk, useUpsertChunk, uploadImage } from "@/lib/data";
 import { SECTIONS, SECTION_META, PLATFORMS, type Section } from "@/lib/sections";
 import { SectionBadge } from "@/components/SectionBadge";
+import { StorageImage } from "@/components/StorageImage";
 import { cn } from "@/lib/utils";
 import type { Chunk } from "@/lib/types";
 
@@ -210,11 +211,11 @@ function ChunkCard({
       {chunk.images.length > 0 && (
         <div className="mt-3 flex gap-1.5 overflow-x-auto">
           {chunk.images.slice(0, 4).map((url, i) => (
-            <img
+            <StorageImage
               key={i}
               src={url}
               alt=""
-              className="h-14 w-14 object-cover rounded-md border border-border shrink-0"
+              className="h-14 w-14 object-cover rounded-md border border-border shrink-0 bg-muted"
             />
           ))}
         </div>
@@ -415,10 +416,10 @@ function ChunkForm({
             <div className="mt-2 grid grid-cols-4 gap-1.5">
               {images.map((url) => (
                 <div key={url} className="relative group">
-                  <img
+                  <StorageImage
                     src={url}
                     alt=""
-                    className="aspect-square w-full object-cover rounded-md border border-border"
+                    className="aspect-square w-full object-cover rounded-md border border-border bg-muted"
                   />
                   <button
                     onClick={() => setImages((p) => p.filter((u) => u !== url))}

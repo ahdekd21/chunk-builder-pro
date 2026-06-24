@@ -10,6 +10,7 @@ import {
 } from "@/lib/data";
 import { SECTIONS, PLATFORMS } from "@/lib/sections";
 import { SectionBadge } from "@/components/SectionBadge";
+import { StorageImage } from "@/components/StorageImage";
 import { cn } from "@/lib/utils";
 import type { PromptSet } from "@/lib/types";
 
@@ -172,7 +173,7 @@ function SetCard({
     >
       {hero ? (
         <div className="aspect-[4/3] bg-muted overflow-hidden">
-          <img src={hero} alt="" className="h-full w-full object-cover" />
+          <StorageImage src={hero} alt="" className="h-full w-full object-cover bg-muted" />
         </div>
       ) : (
         <div className="aspect-[4/3] bg-muted/40 p-4 text-[11px] leading-relaxed text-muted-foreground overflow-hidden">
@@ -317,10 +318,10 @@ function DetailPanel({
             <div className="grid grid-cols-2 gap-2">
               {set.result_images.map((url) => (
                 <div key={url} className="relative group">
-                  <img
+                  <StorageImage
                     src={url}
                     alt=""
-                    className="aspect-square w-full object-cover rounded-lg border border-border"
+                    className="aspect-square w-full object-cover rounded-lg border border-border bg-muted"
                   />
                   <button
                     onClick={() => removeImage(url)}
