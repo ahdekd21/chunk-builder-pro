@@ -82,6 +82,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "Promptkit" },
       { property: "og:description", content: "이미지 생성 AI를 위한 프롬프트 조립 도구" },
       { property: "og:type", content: "website" },
+      { name: "twitter:title", content: "Promptkit" },
+      { name: "twitter:description", content: "이미지 생성 AI를 위한 프롬프트 조립 도구" },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/7ed99bce-23e0-475b-bcf1-9d17fda2883b/id-preview-f81c1294--c26849c8-9bbf-47e0-aa75-b589bcc4ca5f.lovable.app-1782298245766.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/7ed99bce-23e0-475b-bcf1-9d17fda2883b/id-preview-f81c1294--c26849c8-9bbf-47e0-aa75-b589bcc4ca5f.lovable.app-1782298245766.png" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       {
