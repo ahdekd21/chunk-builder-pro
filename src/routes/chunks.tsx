@@ -416,10 +416,10 @@ function ChunkForm({
             <div className="mt-2 grid grid-cols-4 gap-1.5">
               {images.map((url) => (
                 <div key={url} className="relative group">
-                  <img
+                  <StorageImage
                     src={url}
                     alt=""
-                    className="aspect-square w-full object-cover rounded-md border border-border"
+                    className="aspect-square w-full object-cover rounded-md border border-border bg-muted"
                   />
                   <button
                     onClick={() => setImages((p) => p.filter((u) => u !== url))}
