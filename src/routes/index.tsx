@@ -318,10 +318,10 @@ function DetailPanel({
             <div className="grid grid-cols-2 gap-2">
               {set.result_images.map((url) => (
                 <div key={url} className="relative group">
-                  <img
+                  <StorageImage
                     src={url}
                     alt=""
-                    className="aspect-square w-full object-cover rounded-lg border border-border"
+                    className="aspect-square w-full object-cover rounded-lg border border-border bg-muted"
                   />
                   <button
                     onClick={() => removeImage(url)}
